@@ -16,12 +16,20 @@ public class DependencyInjector
 
     public void AddDependency<I, T>() where I : class where T : class
     {
-        _dependencies.Add(new Dependency(typeof(I), () => CreateInstanceWithDependencies(typeof(T))));
+        AddDependency(typeof(I), () => CreateInstanceWithDependencies(typeof(T)));
     }
 
     public void AddDependency<I, T>(Func<T> producer) where I : class where T : class
     {
-        _dependencies.Add(new Dependency(typeof(I), producer));
+        AddDependency(typeof(I), producer);
+    }
+
+    private void AddDependency(Type interfaceType, Func<object> producer)
+    {
+        if (!interfaceType.IsInterface)
+            throw new ArgumentException($"Type {interfaceType} is not an interface");
+
+        _dependencies.Add(new Dependency(interfaceType, producer));
     }
 
     public void Run()
