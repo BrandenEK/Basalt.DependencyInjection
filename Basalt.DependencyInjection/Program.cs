@@ -13,8 +13,8 @@ internal class Program
 
         injector.AddDependency<ILogger, ConsoleLogger>();
 
-        injector.AddDependency<IDataImporter, RandomImporter>();
-        //injector.AddDependency<IDataImporter, FileImporter>(() => new FileImporter(filePath));
+        injector.AddDependency<IDataImporter, FileImporter>(() => new FileImporter(filePath, injector.GetService<ILogger>()));
+        //injector.AddDependency<IDataImporter, RandomImporter>();
 
         injector.Run();
 

@@ -35,6 +35,16 @@ public class DependencyInjector
         _dependencies.Add(new Dependency(interfaceType, producer));
     }
 
+    public I GetService<I>() where I : class
+    {
+        Type interfaceType = typeof(I);
+
+        if (!_dependencies.Any(d => d.Interface == interfaceType))
+            throw new ArgumentException($"Type {interfaceType.Name} is not injectable");
+
+        return (I)GetDependency(interfaceType);
+    }
+
     public void Run()
     {
         foreach (var service in _services)

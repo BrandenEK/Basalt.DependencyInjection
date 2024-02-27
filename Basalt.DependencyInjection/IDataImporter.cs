@@ -9,14 +9,17 @@ public interface IDataImporter
 public class FileImporter : IDataImporter
 {
     private readonly string _path;
+    private readonly ILogger _logger;
 
-    public FileImporter(string path)
+    public FileImporter(string path, ILogger logger)
     {
         _path = path;
+        _logger = logger;
     }
 
     public string[] Import()
     {
+        _logger.Error(_path + " might not exist");
         return File.Exists(_path) ? File.ReadAllLines(_path) : Array.Empty<string>();
     }
 }
