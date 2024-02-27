@@ -12,7 +12,9 @@ internal class Program
         injector.AddService<TestService>();
 
         injector.AddDependency<ILogger, ConsoleLogger>();
-        injector.AddDependency<IDataImporter, FileImporter>(() => new FileImporter(filePath));
+
+        injector.AddDependency<IDataImporter, RandomImporter>();
+        //injector.AddDependency<IDataImporter, FileImporter>(() => new FileImporter(filePath));
 
         injector.Run();
 

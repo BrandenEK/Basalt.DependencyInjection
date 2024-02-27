@@ -16,12 +16,12 @@ public class DependencyInjector
 
     public void AddDependency<I, T>() where I : class where T : class
     {
-        _dependencies.Add(new Dependency(typeof(I), typeof(T), () => CreateInstanceWithDependencies(typeof(T))));
+        _dependencies.Add(new Dependency(typeof(I), () => CreateInstanceWithDependencies(typeof(T))));
     }
 
     public void AddDependency<I, T>(Func<T> producer) where I : class where T : class
     {
-        _dependencies.Add(new Dependency(typeof(I), typeof(T), producer));
+        _dependencies.Add(new Dependency(typeof(I), producer));
     }
 
     public void Run()
@@ -49,7 +49,7 @@ public class DependencyInjector
             return instance;
 
         Console.WriteLine($"No instance of {interfaceType.Name} exists yet");
-        return _instances[interfaceType] = _dependencies.First(d => d.Interface == interfaceType).Producer(); //CreateInstanceWithDependencies(_dependencies.First(d => d.Interface == interfaceType).Concrete);
+        return _instances[interfaceType] = _dependencies.First(d => d.Interface == interfaceType).Producer();
     }
 
     private ConstructorInfo GetValidConstructor(Type concreteType)
@@ -70,5 +70,5 @@ public class DependencyInjector
     }
 
     record Service(Type Class);
-    record Dependency(Type Interface, Type Concrete, Func<object> Producer);
+    record Dependency(Type Interface, Func<object> Producer);
 }
